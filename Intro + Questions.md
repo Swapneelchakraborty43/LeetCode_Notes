@@ -16,6 +16,103 @@ HashMap internally uses an array of buckets, where each bucket contains nodes st
 
 
 
+**Java 21 Features:**
+
+
+
+1. Virtual Threads - Lightweight threads managed by the JVM 
+- Virtual threads primarily improve scalability and throughput for applications with many concurrent blocking I/O operations. They don't make CPU-intensive operations faster.
+2. Pattern Matching for switch
+-Object obj = "Hello";
+
+
+
+switch (obj) {
+
+&#x20;   case Integer i -> System.out.println("Integer: " + i);
+
+&#x20;   case String s -> System.out.println("String: " + s);
+
+&#x20;   case null -> System.out.println("null");
+
+&#x20;   default -> System.out.println("Something else");
+
+}
+
+
+
+
+
+3\. Record Patterns: Deconstruct records directly in pattern matching
+
+
+
+record Employee(String name, int age) {}
+
+
+
+if (employee instanceof Employee(String name, int age)) {
+
+&#x20;   System.out.println(name);
+
+&#x20;   System.out.println(age);
+
+}
+
+
+
+
+
+**Migrated Spring Boot 3 → 4
+
+Spring Batch 6 reorganized a number of APIs into more focused packages. For example:**
+
+During our Spring Boot 3 to 4 migration, the upgrade also brought major version upgrades of Spring Framework, Spring Batch and Hibernate, so we had to address several breaking API and configuration changes.
+
+
+
+First, I handled the \*\*Spring Batch 6 migration\*\*. Several batch APIs were moved to new packages, so I updated imports across the batch configuration and implementation classes. 
+
+I also fixed API changes in `MultiResourceItemReader` and `FlatFileItemReader` constructors/builders while making sure the existing file-processing and mapping behavior remained unchanged.
+
+
+
+Second, I handled \*\*Spring Boot package and infrastructure changes\*\*. `@EntityScan` moved to the new persistence package, and some of our direct references to the web application context had to be updated based on the new package structure. I also reviewed our `SpringBootServletInitializer` usage against our deployment model and removed it where it was no longer required.
+
+
+
+Third, I addressed the \*\*Hibernate migration impact\*\*. The Hibernate upgrade changed the effective naming behavior, which affected the case of generated table names. Since our existing database schema expected a particular naming convention, I updated the Hibernate configuration in `application.yml` and replaced the incompatible custom naming strategy with the supported approach.
+
+
+
+After making these changes, I validated the application at multiple levels—compilation, Spring context startup, batch job execution, entity scanning, database schema validation, and integration tests—to make sure the migration did not introduce functional regressions.
+
+
+
+The main challenge was that this wasn't just a version-number upgrade; it involved identifying breaking changes across multiple underlying frameworks and making the application compatible while preserving existing business behavior.
+
+
+
+
+
+
+
+**reduced build warnings by 70%**
+
+One of the benefits we achieved during the Spring Boot 3 to 4 migration was a significant reduction in build-security warnings. Our SNC count went from 35 high/critical findings to just 2 remaining findings. A major contributor was the dependency upgrades that came with the Spring Boot 4 dependency management. The migration brought newer versions of transitive and direct components such as Hibernate, Apache Camel, Solace, Tomcat and Netty, which resolved many vulnerabilities and outdated-version findings without requiring individual application-code changes. I then reviewed the remaining findings separately and identified the two that still required remediation.
+
+
+
+**Explain the architecture:**
+
+
+
+
+
+
+
+
+
 \-------------------------- SAGA -----------------
 
 Saga Design Pattern Overview
