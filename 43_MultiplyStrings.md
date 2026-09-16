@@ -26,4 +26,4 @@ Behind the scenes, the computer calculates:
 
 - what will c * a return
 
-![img_1.png](img_1.png)
+![img_1.png](images/img_1.png)
