@@ -51,4 +51,12 @@ Important Questions:
 - 3rd highest salary
 - highest salary from particular department 2 tables
 - JWT Oauth2
-- 
+
+Explain Security in Springboot?
+
+How is configuration management handeled across environments
+
+API Gateway
+
+
+
